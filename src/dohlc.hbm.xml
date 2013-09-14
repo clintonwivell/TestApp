@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="main.com.gap.DOHLC" table="tbl_es2">
+        <id name="DOHLCid" type="int" column="DOHLCid">
+            <generator class="increment" />
+        </id>
+        <property name="symbol">
+            <column name="symbol" />
+        </property>
+        <property name="datestamp" type="timestamp">
+            <column name="datestamp" />
+        </property>
+        <property name="open" type="float">
+            <column name="open" />
+        </property>
+        <property name="high" type="float">
+            <column name="high" />
+        </property>
+        <property name="low" type="float">
+            <column name="low" />
+        </property>
+        <property name="close" type="float">
+            <column name="close" />
+        </property>
+        <property name="volume" type="int">
+            <column name="volume" />
+        </property>
+        <property name="openinterest" type="int">
+            <column name="openinterest" />
+        </property>
+    </class>
+</hibernate-mapping>

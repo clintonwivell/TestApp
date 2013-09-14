@@ -1,0 +1,10 @@
+CREATE TABLE `tbl_es2` (
+  `symbol` varchar(10) DEFAULT NULL,
+  `datestamp` date DEFAULT NULL,
+  `open` float(10,2) DEFAULT NULL,
+  `high` float(10,2) DEFAULT NULL,
+  `low` float(10,2) DEFAULT NULL,
+  `close` float(10,2) DEFAULT NULL,
+  `volume` int(11) DEFAULT NULL,
+  `openInterest` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
