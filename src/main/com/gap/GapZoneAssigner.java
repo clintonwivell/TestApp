@@ -16,7 +16,7 @@ public class GapZoneAssigner {
 		DohlcDAO dao = new DohlcDAO();
 		GapZone zone;
 		List <DOHLC> previousDayFlat = new ArrayList<DOHLC>();
-		List <DOHLC> NoZONE = new ArrayList<DOHLC>();
+		List <DohlcPair> NoZONE = new ArrayList<DohlcPair>();
 		
 		List <DOHLC> DH = new ArrayList<DOHLC>();
 		List <DOHLC> DHO = new ArrayList<DOHLC>();
@@ -60,8 +60,6 @@ public class GapZoneAssigner {
 									break;
 					case DL:		DL.add(currentDay);
 									break;				
-					case NoZONE: 	NoZONE.add(currentDay);
-									break;
 					default:		break;
 				}
 			}
@@ -81,18 +79,27 @@ public class GapZoneAssigner {
 									break;
 					case UL:		UL.add(currentDay);
 									break;
-					case NoZONE:	NoZONE.add(currentDay);
-									break;
 					default:		break;
 				}
 			}
-			else
+			else if(previousDay.getOpen() == previousDay.getClose())
 			{
 				previousDayFlat.add(currentDay);
+			}
+			else
+			{
+				NoZONE.add(new DohlcPair(currentDay, previousDay));
 			}
 			totalCounted++;
 			currentDay = previousDay;
 		}	
+		
+		if(NoZONE.size() != 0)
+		{
+			for(DohlcPair dohlcPair : NoZONE)
+				{System.out.println(dohlcPair);}
+		}
+		
 		
 		int total = DownDaycounter+UpDaycounter+previousDayFlat.size()+NoZONE.size();
 		System.out.println("DHcounter: "+ DH.size());
@@ -109,8 +116,8 @@ public class GapZoneAssigner {
 		
 		System.out.println("\nDownDaycounter: "+ DownDaycounter);
 		System.out.println("UpDaycounter: "+ UpDaycounter);
-		System.out.println("noGapZones: "+ NoZONE.size());
-		System.out.println("noGapZones: "+ previousDayFlat.size());
+		System.out.println("NoZONE: "+ NoZONE.size());
+		System.out.println("previousDayFlat: "+ previousDayFlat.size());
 		System.out.println("total: "+total);
 		
 		
@@ -142,10 +149,8 @@ public class GapZoneAssigner {
 		{
 			return GapZone.UL;
 		}
-		else
-		{
-			return GapZone.NoZONE;
-		}
+		
+		return null;
 	}
 
 	private GapZone getDownGapZone(DOHLC currentDay, DOHLC previousDay) {
@@ -170,10 +175,8 @@ public class GapZoneAssigner {
 		{
 			return GapZone.DL;
 		}
-		else
-		{
-			return GapZone.NoZONE;
-		}
+		
+		return null;
 	}
 	
 }
