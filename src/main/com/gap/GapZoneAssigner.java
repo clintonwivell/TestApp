@@ -1,28 +1,36 @@
 package main.com.gap;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 public class GapZoneAssigner {
+	
+	public GapZoneAssigner(){
+		
+	}
 
 	public boolean assignGapZone() {
 		DOHLC currentDay;
 		DOHLC previousDay;
 		DohlcDAO dao = new DohlcDAO();
+		GapZone zone;
+		List <DOHLC> previousDayFlat = new ArrayList<DOHLC>();
+		List <DOHLC> NoZONE = new ArrayList<DOHLC>();
 		
-		int DHcounter = 0;
-		int DHOcounter = 0;
-		int DOCcounter = 0;
-		int DCLcounter = 0;
-		int DLcounter = 0;
-		int EQUAL_DOWNcounter = 0;
+		List <DOHLC> DH = new ArrayList<DOHLC>();
+		List <DOHLC> DHO = new ArrayList<DOHLC>();
+		List <DOHLC> DOC = new ArrayList<DOHLC>();
+		List <DOHLC> DCL = new ArrayList<DOHLC>();
+		List <DOHLC> DL = new ArrayList<DOHLC>();
 		
-		int UHcounter = 0;
-		int UHCcounter = 0;
-		int UCOcounter = 0;
-		int UOLcounter = 0;
-		int ULcounter = 0;
-		int EQUAL_UPcounter = 0;
+		List <DOHLC> UH = new ArrayList<DOHLC>();
+		List <DOHLC> UHC = new ArrayList<DOHLC>();
+		List <DOHLC> UCO = new ArrayList<DOHLC>();
+		List <DOHLC> UOL = new ArrayList<DOHLC>();
+		List <DOHLC> UL = new ArrayList<DOHLC>();
 		
+		int totalCounted = 0;
 		int DownDaycounter = 0;
 		int UpDaycounter = 0;
 		
@@ -40,92 +48,132 @@ public class GapZoneAssigner {
 			if(previousDay.getOpen() > previousDay.getClose())
 			{
 				DownDaycounter++;
-				if(currentDay.getOpen() > previousDay.getHigh())
-				{
-					DHcounter++;
-				}
-				if(currentDay.getOpen() <= previousDay.getHigh() && currentDay.getOpen() > previousDay.getOpen())
-				{
-					DHOcounter++;
-				}
-				if(currentDay.getOpen() <= previousDay.getOpen() && currentDay.getOpen() > previousDay.getClose())
-				{
-					DOCcounter++;
-				}
-				if(currentDay.getOpen() <= previousDay.getClose() && currentDay.getOpen() > previousDay.getLow())
-				{
-					DCLcounter++;
-				}
-				if(currentDay.getOpen() <= previousDay.getLow())
-				{
-					DLcounter++;
-				}
-				if(currentDay.getOpen() == previousDay.getClose())
-				{
-					EQUAL_DOWNcounter++;
+				
+				switch (getDownGapZone(currentDay, previousDay)){
+					case DH:		DH.add(currentDay);
+									break;
+					case DHO:		DHO.add(currentDay);
+									break;
+					case DOC:		DOC.add(currentDay);
+									break;
+					case DCL:		DCL.add(currentDay);
+									break;
+					case DL:		DL.add(currentDay);
+									break;				
+					case NoZONE: 	NoZONE.add(currentDay);
+									break;
+					default:		break;
 				}
 			}
-			
 			//PRIOR DAY UP
-			if(previousDay.getOpen() < previousDay.getClose())
+			else if(previousDay.getOpen() < previousDay.getClose())
 			{
-				DownDaycounter++;
-				if(currentDay.getOpen() > previousDay.getHigh())
-				{
-					UHcounter++;
-				}
-				if(currentDay.getOpen() <= previousDay.getHigh() && currentDay.getOpen() > previousDay.getClose())
-				{
-					UHCcounter++;
-				}
-				if(currentDay.getOpen() <= previousDay.getClose() && currentDay.getOpen() > previousDay.getOpen())
-				{
-					UCOcounter++;
-				}
-				if(currentDay.getOpen() <= previousDay.getOpen() && currentDay.getOpen() > previousDay.getLow())
-				{
-					UOLcounter++;
-				}
-				if(currentDay.getOpen() <= previousDay.getLow())
-				{
-					ULcounter++;
-				}
-				if(currentDay.getOpen() == previousDay.getClose())
-				{
-					EQUAL_UPcounter++;
+				UpDaycounter++;
+				
+				switch (getUpGapZone(currentDay, previousDay)){
+					case UH:		UH.add(currentDay);
+									break;
+					case UHC:		UHC.add(currentDay);
+					break;
+					case UCO:		UCO.add(currentDay);
+									break;
+					case UOL:		UOL.add(currentDay);
+									break;
+					case UL:		UL.add(currentDay);
+									break;
+					case NoZONE:	NoZONE.add(currentDay);
+									break;
+					default:		break;
 				}
 			}
-			
+			else
+			{
+				previousDayFlat.add(currentDay);
+			}
+			totalCounted++;
 			currentDay = previousDay;
 		}	
 		
-		int totalDownDays = DHcounter+DHOcounter+DOCcounter+DCLcounter+DLcounter+EQUAL_DOWNcounter;
+		int total = DownDaycounter+UpDaycounter+previousDayFlat.size()+NoZONE.size();
+		System.out.println("DHcounter: "+ DH.size());
+		System.out.println("DHOcounter: "+ DHO.size());
+		System.out.println("DOCcounter: "+ DOC.size());
+		System.out.println("DCLcounter: "+ DCL.size());
+		System.out.println("DLcounter: "+ DL.size());
 		
-		System.out.println("DHcounter: "+ DHcounter);
-		System.out.println("DHOcounter: "+ DHOcounter);
-		System.out.println("DOCcounter: "+ DOCcounter);
-		System.out.println("DCLcounter: "+ DCLcounter);
-		System.out.println("DLcounter: "+ DLcounter);
-		System.out.println("EQUAL_DOWNcounter: "+ EQUAL_DOWNcounter);
+		System.out.println("\nUHcounter: "+ UH.size());
+		System.out.println("UHCcounter: "+ UHC.size());
+		System.out.println("UCOcounter: "+ UCO.size());
+		System.out.println("UOLcounter: "+ UOL.size());
+		System.out.println("ULcounter: "+ UL.size());
+		
 		System.out.println("\nDownDaycounter: "+ DownDaycounter);
-		System.out.println("totalDownDays: "+ totalDownDays);
+		System.out.println("UpDaycounter: "+ UpDaycounter);
+		System.out.println("noGapZones: "+ NoZONE.size());
+		System.out.println("noGapZones: "+ previousDayFlat.size());
+		System.out.println("total: "+total);
 		
-		int totalUpDays = UHcounter+UHCcounter+UCOcounter+UOLcounter+ULcounter+EQUAL_UPcounter;
 		
-		System.out.println("UHcounter: "+ UHcounter);
-		System.out.println("UHCcounter: "+ UHCcounter);
-		System.out.println("UCOcounter: "+ UCOcounter);
-		System.out.println("UOLcounter: "+ UOLcounter);
-		System.out.println("ULcounter: "+ ULcounter);
-		System.out.println("EQUAL_UPcounter: "+ EQUAL_UPcounter);
-		System.out.println("\nUpDaycounter: "+ UpDaycounter);
-		System.out.println("totalUpDays: "+ totalUpDays);
-		
-		System.out.println((totalUpDays+totalDownDays));
-		
-		if(totalDownDays ==  DownDaycounter && totalUpDays ==  UpDaycounter)
+		if(total == totalCounted)
 			{return true;}
 		else
 			{return false;}	
 	}
+
+	private GapZone getUpGapZone(DOHLC currentDay, DOHLC previousDay) {
+		
+		if(currentDay.getOpen() > previousDay.getHigh())
+		{
+			return GapZone.UH;
+		}
+		else if(currentDay.getOpen() <= previousDay.getHigh() && currentDay.getOpen() > previousDay.getClose())
+		{
+			return GapZone.UHC;
+		}
+		else if(currentDay.getOpen() <= previousDay.getClose() && currentDay.getOpen() > previousDay.getOpen())
+		{
+			return GapZone.UCO;
+		}
+		else if(currentDay.getOpen() <= previousDay.getOpen() && currentDay.getOpen() > previousDay.getLow())
+		{
+			return GapZone.UOL;
+		}
+		else if(currentDay.getOpen() <= previousDay.getLow())
+		{
+			return GapZone.UL;
+		}
+		else
+		{
+			return GapZone.NoZONE;
+		}
+	}
+
+	private GapZone getDownGapZone(DOHLC currentDay, DOHLC previousDay) {
+		
+		if(currentDay.getOpen() > previousDay.getHigh())
+		{
+			return GapZone.DH;
+		}
+		else if(currentDay.getOpen() <= previousDay.getHigh() && currentDay.getOpen() > previousDay.getOpen())
+		{
+			return GapZone.DHO;
+		}
+		else if(currentDay.getOpen() <= previousDay.getOpen() && currentDay.getOpen() > previousDay.getClose())
+		{
+			return GapZone.DOC;
+		}
+		else if(currentDay.getOpen() <= previousDay.getClose() && currentDay.getOpen() > previousDay.getLow())
+		{
+			return GapZone.DCL;
+		}
+		else if(currentDay.getOpen() <= previousDay.getLow())
+		{
+			return GapZone.DL;
+		}
+		else
+		{
+			return GapZone.NoZONE;
+		}
+	}
+	
 }

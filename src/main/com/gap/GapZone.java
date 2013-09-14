@@ -14,5 +14,5 @@ package main.com.gap;
  * L = below the prior day's low price
  */
 public enum GapZone {
-	DH,DHO,DOC,DCL,DL,UH,UHC,UCO,UOL,UL;
+	DH,DHO,DOC,DCL,DL,UH,UHC,UCO,UOL,UL,NoZONE;
 }
