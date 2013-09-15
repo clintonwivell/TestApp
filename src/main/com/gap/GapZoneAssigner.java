@@ -4,13 +4,15 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import main.com.gap.exception.NoGapZoneException;
+
 public class GapZoneAssigner {
 	
 	public GapZoneAssigner(){
 		
 	}
 
-	public boolean assignGapZone() {
+	public boolean assignGapZone() throws NoGapZoneException {
 		DOHLC currentDay;
 		DOHLC previousDay;
 		DohlcDAO dao = new DohlcDAO();
@@ -94,10 +96,8 @@ public class GapZoneAssigner {
 			currentDay = previousDay;
 		}	
 		
-		if(NoZONE.size() != 0)
-		{
-			for(DohlcPair dohlcPair : NoZONE)
-				{System.out.println(dohlcPair);}
+		if(NoZONE.size() != 0){
+			{throw new NoGapZoneException(NoZONE);}
 		}
 		
 		

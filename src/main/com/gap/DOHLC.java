@@ -7,12 +7,12 @@ public class DOHLC {
 	private int DOHLCid;
 	private String symbol;
     private Date datestamp;
-    private Float open;
-    private Float high;
-    private Float low;
-    private Float close;
-    private Integer volume;
-    private Integer openinterest;
+    private float open;
+    private float high;
+    private float low;
+    private float close;
+    private int volume;
+    private int openinterest;
     
     public int getDOHLCid() {
 		return DOHLCid;
@@ -32,37 +32,37 @@ public class DOHLC {
 	public void setDatestamp(Date datestamp) {
 		this.datestamp = datestamp;
 	}
-	public Float getOpen() {
+	public float getOpen() {
 		return open;
 	}
 	public void setOpen(Float open) {
 		this.open = open;
 	}
-	public Float getHigh() {
+	public float getHigh() {
 		return high;
 	}
 	public void setHigh(Float high) {
 		this.high = high;
 	}
-	public Float getLow() {
+	public float getLow() {
 		return low;
 	}
 	public void setLow(Float low) {
 		this.low = low;
 	}
-	public Float getClose() {
+	public float getClose() {
 		return close;
 	}
 	public void setClose(Float close) {
 		this.close = close;
 	}
-	public Integer getVolume() {
+	public int getVolume() {
 		return volume;
 	}
 	public void setVolume(Integer volume) {
 		this.volume = volume;
 	}
-	public Integer getOpeninterest() {
+	public int getOpeninterest() {
 		return openinterest;
 	}
 	public void setOpeninterest(Integer openinterest) {
