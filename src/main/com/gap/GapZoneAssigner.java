@@ -16,8 +16,6 @@ public class GapZoneAssigner {
 		DOHLC currentDay;
 		DOHLC previousDay;
 		DohlcDAO dao = new DohlcDAO();
-		GapZone zone;
-		List <DOHLC> previousDayFlat = new ArrayList<DOHLC>();
 		List <DohlcPair> NoZONE = new ArrayList<DohlcPair>();
 		
 		List <DOHLC> DH = new ArrayList<DOHLC>();
@@ -47,7 +45,7 @@ public class GapZoneAssigner {
 			previousDay = (DOHLC) iterator.next();
 			
 			//PRIOR DAY DOWN
-			if(previousDay.getOpen() > previousDay.getClose())
+			if(previousDay.getOpen() >= previousDay.getClose())
 			{
 				DownDaycounter++;
 				
@@ -84,10 +82,6 @@ public class GapZoneAssigner {
 					default:		break;
 				}
 			}
-			else if(previousDay.getOpen() == previousDay.getClose())
-			{
-				previousDayFlat.add(currentDay);
-			}
 			else
 			{
 				NoZONE.add(new DohlcPair(currentDay, previousDay));
@@ -101,7 +95,7 @@ public class GapZoneAssigner {
 		}
 		
 		
-		int total = DownDaycounter+UpDaycounter+previousDayFlat.size()+NoZONE.size();
+		int total = DownDaycounter+UpDaycounter+NoZONE.size();
 		System.out.println("DHcounter: "+ DH.size());
 		System.out.println("DHOcounter: "+ DHO.size());
 		System.out.println("DOCcounter: "+ DOC.size());
@@ -117,7 +111,6 @@ public class GapZoneAssigner {
 		System.out.println("\nDownDaycounter: "+ DownDaycounter);
 		System.out.println("UpDaycounter: "+ UpDaycounter);
 		System.out.println("NoZONE: "+ NoZONE.size());
-		System.out.println("previousDayFlat: "+ previousDayFlat.size());
 		System.out.println("total: "+total);
 		
 		
